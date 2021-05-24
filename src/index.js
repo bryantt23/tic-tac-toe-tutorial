@@ -3,9 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square(props) {
+  console.log('🚀 ~ file: index.js ~ line 6 ~ Square ~ props', props);
+  const value = !props.value ? null : props.value.value;
   return (
-    <button className='square' onClick={() => props.onClick()}>
-      {props.value}
+    <button
+      className='square'
+      onClick={() => props.onClick()}
+      style={{ backgroundColor: props.backgroundColor }}
+    >
+      {value}
     </button>
   );
 }
@@ -77,7 +83,7 @@ class Game extends React.Component {
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
+    squares[i] = this.state.xIsNext ? { value: 'X' } : { value: 'O' };
     this.setState({
       history: history.concat([{ squares: squares, row: r, col: c }]),
       stepNumber: history.length,
@@ -95,9 +101,20 @@ class Game extends React.Component {
 
   render() {
     const history = this.state.history;
+    console.log(
+      '🚀 ~ file: index.js ~ line 102 ~ Game ~ render ~ history',
+      history
+    );
     const current = history[this.state.stepNumber];
     const obj = calculateWinner(current.squares);
     const winner = !obj ? null : obj.winner;
+    const winningSquares = !obj ? null : obj.winningSquares;
+
+    const hx = this.state.history[this.state.history.length - 1].squares;
+    console.log('🚀 ~ file: index.js ~ line 112 ~ Game ~ render ~ hx', hx);
+    if (winningSquares) {
+      // this.setState()
+    }
 
     const moves = history.map((step, move) => {
       const desc = move
@@ -165,8 +182,15 @@ function calculateWinner(squares) {
   ];
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return { winner: squares[a] };
+    if (
+      squares[a] &&
+      squares[b] &&
+      squares[c] &&
+      squares[a].value &&
+      squares[a].value === squares[b].value &&
+      squares[a].value === squares[c].value
+    ) {
+      return { winner: squares[a].value, winningSquares: lines[i] };
     }
   }
   return null;
