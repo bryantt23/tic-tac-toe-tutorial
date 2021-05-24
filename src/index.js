@@ -5,11 +5,15 @@ import './index.css';
 function Square(props) {
   console.log('🚀 ~ file: index.js ~ line 6 ~ Square ~ props', props);
   const value = !props.value ? null : props.value.value;
+  const backgroundColor =
+    props.value && props.value.backgroundColor
+      ? props.value.backgroundColor
+      : null;
   return (
     <button
       className='square'
       onClick={() => props.onClick()}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={{ backgroundColor: backgroundColor }}
     >
       {value}
     </button>
@@ -83,7 +87,9 @@ class Game extends React.Component {
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
-    squares[i] = this.state.xIsNext ? { value: 'X' } : { value: 'O' };
+    squares[i] = this.state.xIsNext
+      ? { value: 'X' }
+      : { value: 'O', backgroundColor: 'green' };
     this.setState({
       history: history.concat([{ squares: squares, row: r, col: c }]),
       stepNumber: history.length,
