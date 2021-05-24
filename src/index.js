@@ -20,26 +20,64 @@ class Board extends React.Component {
     );
   }
 
+  buildBoard() {
+    const size = 3;
+
+    let index = 0,
+      boardIndex = 0;
+    const boardArr = [];
+
+    for (let i = 0; i < size; i++) {
+      // const boardRow = document.createElement('div');
+      // boardRow.className = 'board-row';
+      const arr = [];
+      for (let j = 0; j < 3; j++) {
+        let square = this.renderSquare(index);
+        arr.push(square);
+        index++;
+      }
+
+      const boardRow = (
+        <div className='board-row' key={i}>
+          {arr.map(child => {
+            console.log(
+              '🚀 ~ file: index.js ~ line 45 ~ Board ~ buildBoard ~ boardIndex',
+              boardIndex
+            );
+
+            return <span key={boardIndex++}> {child}</span>;
+          })}
+        </div>
+      );
+      boardArr.push(boardRow);
+
+      // div.appendChild(boardRow);
+    }
+    // return <div></div>;
+    return <div>{boardArr}</div>;
+  }
+
   render() {
-    return (
-      <div>
-        <div className='board-row'>
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className='board-row'>
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className='board-row'>
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
+    return this.buildBoard();
+    // return (
+    //   <div>
+    //     <div className='board-row'>
+    //       {this.renderSquare(0)}
+    //       {this.renderSquare(1)}
+    //       {this.renderSquare(2)}
+    //     </div>
+    //     <div className='board-row'>
+    //       {this.renderSquare(3)}
+    //       {this.renderSquare(4)}
+    //       {this.renderSquare(5)}
+    //     </div>
+    //     <div className='board-row'>
+    //       {this.renderSquare(6)}
+    //       {this.renderSquare(7)}
+    //       {this.renderSquare(8)}
+    //     </div>
+    //   </div>
+    // );
   }
 }
 
