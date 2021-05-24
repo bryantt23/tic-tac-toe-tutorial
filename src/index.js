@@ -104,12 +104,17 @@ class Game extends React.Component {
   }
 
   highlightWinningSquares(history, winningSquares) {
+    const index = history.length - 1;
     const historyCopy = [...history];
-    const hist = history[history.length - 1].squares;
+    const hist = history[index];
     for (let w of winningSquares) {
-      hist[w] = { ...hist[w], backgroundColor: 'green' };
+      hist.squares[w] = { ...hist.squares[w], backgroundColor: 'green' };
     }
-    historyCopy[history.length - 1] = { squares: hist };
+    console.log(
+      '🚀 ~ file: index.js ~ line 109 ~ Game ~ highlightWinningSquares ~ hist',
+      hist
+    );
+    historyCopy[index] = hist;
     this.setState({ history: historyCopy });
   }
 
