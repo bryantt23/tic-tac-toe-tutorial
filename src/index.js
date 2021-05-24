@@ -49,25 +49,6 @@ class Board extends React.Component {
 
   render() {
     return this.buildBoard();
-    // return (
-    //   <div>
-    //     <div className='board-row'>
-    //       {this.renderSquare(0)}
-    //       {this.renderSquare(1)}
-    //       {this.renderSquare(2)}
-    //     </div>
-    //     <div className='board-row'>
-    //       {this.renderSquare(3)}
-    //       {this.renderSquare(4)}
-    //       {this.renderSquare(5)}
-    //     </div>
-    //     <div className='board-row'>
-    //       {this.renderSquare(6)}
-    //       {this.renderSquare(7)}
-    //       {this.renderSquare(8)}
-    //     </div>
-    //   </div>
-    // );
   }
 }
 
@@ -80,7 +61,8 @@ class Game extends React.Component {
       xIsNext: true,
       r: null,
       c: null,
-      selectedIndex: null
+      selectedIndex: null,
+      movesAscOrder: true
     };
   }
 
@@ -117,11 +99,6 @@ class Game extends React.Component {
     const winner = calculateWinner(current.squares);
 
     const moves = history.map((step, move) => {
-      console.log(
-        '🚀 ~ file: index.js ~ line 91 ~ Game ~ moves ~ step, move',
-        step,
-        move
-      );
       const desc = move
         ? 'Go to move #' + move + ' row: ' + step.row + ' col: ' + step.col
         : 'Go to game start';
@@ -133,10 +110,6 @@ class Game extends React.Component {
                 this.state.selectedIndex === move ? 'green' : null
             }}
             onClick={e => {
-              console.log(
-                '🚀 ~ file: index.js ~ line 97 ~ Game ~ moves ~ e',
-                e
-              );
               this.jumpTo(move);
               this.setState({ selectedIndex: move });
             }}
@@ -160,8 +133,17 @@ class Game extends React.Component {
           <Board squares={current.squares} onClick={i => this.handleClick(i)} />
         </div>
         <div className='game-info'>
+          <button
+            onClick={() => {
+              this.setState({ movesAscOrder: !this.state.movesAscOrder });
+            }}
+          >
+            Change moves to{' '}
+            {this.state.movesAscOrder ? 'descending' : 'ascending'} order
+          </button>
+
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <ol>{this.state.movesAscOrder ? moves : moves.reverse()}</ol>
         </div>
       </div>
     );
