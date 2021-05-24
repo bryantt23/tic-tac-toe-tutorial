@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square(props) {
-  console.log('🚀 ~ file: index.js ~ line 6 ~ Square ~ props', props);
   const value = !props.value ? null : props.value.value;
   const backgroundColor =
     props.value && props.value.backgroundColor
@@ -72,7 +71,8 @@ class Game extends React.Component {
       r: null,
       c: null,
       selectedIndex: null,
-      movesAscOrder: true
+      movesAscOrder: true,
+      gameOver: false
     };
   }
 
@@ -87,9 +87,7 @@ class Game extends React.Component {
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
-    squares[i] = this.state.xIsNext
-      ? { value: 'X' }
-      : { value: 'O', backgroundColor: 'green' };
+    squares[i] = this.state.xIsNext ? { value: 'X' } : { value: 'O' };
     this.setState({
       history: history.concat([{ squares: squares, row: r, col: c }]),
       stepNumber: history.length,
@@ -105,22 +103,35 @@ class Game extends React.Component {
     });
   }
 
+  highlightWinningSquares(history, winningSquares) {
+    const historyCopy = [...history];
+    const hist = history[history.length - 1].squares;
+    for (let w of winningSquares) {
+      hist[w] = { ...hist[w], backgroundColor: 'green' };
+    }
+    historyCopy[history.length - 1] = { squares: hist };
+    this.setState({ history: historyCopy });
+  }
+
   render() {
     const history = this.state.history;
-    console.log(
-      '🚀 ~ file: index.js ~ line 102 ~ Game ~ render ~ history',
-      history
-    );
     const current = history[this.state.stepNumber];
     const obj = calculateWinner(current.squares);
     const winner = !obj ? null : obj.winner;
     const winningSquares = !obj ? null : obj.winningSquares;
+    console.log(
+      '🚀 ~ file: index.js ~ line 111 ~ Game ~ render ~ winningSquares',
+      winningSquares
+    );
 
-    const hx = this.state.history[this.state.history.length - 1].squares;
-    console.log('🚀 ~ file: index.js ~ line 112 ~ Game ~ render ~ hx', hx);
-    if (winningSquares) {
+    // const hist = this.state.history[this.state.history.length - 1].squares;
+    // console.log('🚀 ~ file: index.js ~ line 117 ~ Game ~ render ~ hist', hist);
+    if (winningSquares && !this.state.gameOver) {
+      this.highlightWinningSquares(history, winningSquares);
       // this.setState()
+      this.setState({ gameOver: true });
     }
+    // console.log('🚀 ~ file: index.js ~ line 117 ~ Game ~ render ~ hist', hist);
 
     const moves = history.map((step, move) => {
       const desc = move
@@ -135,7 +146,7 @@ class Game extends React.Component {
             }}
             onClick={e => {
               this.jumpTo(move);
-              this.setState({ selectedIndex: move });
+              this.setState({ selectedIndex: move, gameOver: false });
             }}
           >
             {desc}
@@ -176,6 +187,8 @@ class Game extends React.Component {
 
 // ========================================
 function calculateWinner(squares) {
+  if (!squares) return;
+
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -186,6 +199,7 @@ function calculateWinner(squares) {
     [0, 4, 8],
     [2, 4, 6]
   ];
+
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (
