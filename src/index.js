@@ -28,8 +28,6 @@ class Board extends React.Component {
     const boardArr = [];
 
     for (let i = 0; i < size; i++) {
-      // const boardRow = document.createElement('div');
-      // boardRow.className = 'board-row';
       const arr = [];
       for (let j = 0; j < 3; j++) {
         let square = this.renderSquare(index);
@@ -39,21 +37,13 @@ class Board extends React.Component {
 
       const boardRow = (
         <div className='board-row' key={i}>
-          {arr.map(child => {
-            console.log(
-              '🚀 ~ file: index.js ~ line 45 ~ Board ~ buildBoard ~ boardIndex',
-              boardIndex
-            );
-
-            return <span key={boardIndex++}> {child}</span>;
-          })}
+          {arr.map(child => (
+            <span key={boardIndex++}> {child}</span>
+          ))}
         </div>
       );
       boardArr.push(boardRow);
-
-      // div.appendChild(boardRow);
     }
-    // return <div></div>;
     return <div>{boardArr}</div>;
   }
 
