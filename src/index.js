@@ -110,10 +110,6 @@ class Game extends React.Component {
     for (let w of winningSquares) {
       hist.squares[w] = { ...hist.squares[w], backgroundColor: 'green' };
     }
-    console.log(
-      '🚀 ~ file: index.js ~ line 109 ~ Game ~ highlightWinningSquares ~ hist',
-      hist
-    );
     historyCopy[index] = hist;
     this.setState({ history: historyCopy });
   }
@@ -124,19 +120,11 @@ class Game extends React.Component {
     const obj = calculateWinner(current.squares);
     const winner = !obj ? null : obj.winner;
     const winningSquares = !obj ? null : obj.winningSquares;
-    console.log(
-      '🚀 ~ file: index.js ~ line 111 ~ Game ~ render ~ winningSquares',
-      winningSquares
-    );
 
-    // const hist = this.state.history[this.state.history.length - 1].squares;
-    // console.log('🚀 ~ file: index.js ~ line 117 ~ Game ~ render ~ hist', hist);
     if (winningSquares && !this.state.gameOver) {
       this.highlightWinningSquares(history, winningSquares);
-      // this.setState()
       this.setState({ gameOver: true });
     }
-    // console.log('🚀 ~ file: index.js ~ line 117 ~ Game ~ render ~ hist', hist);
 
     const moves = history.map((step, move) => {
       const desc = move
